@@ -24,10 +24,15 @@ def process_payment():
             return response_body, response_code
         else:
             gateway = payment_processor.get_payment_gateway()
+            if gateway:
+                return {
+                    'status_code': 200,
+                    'message': 'Payment processed with {}'.format(gateway),
+                }, 200
             return {
-                'status_code': 200,
-                'message': 'Payment processed with {}'.format(gateway),
-            }, 200
+                'status_code': 500,
+                'message': f'Your payment could not be processed by the payment gateway.',
+            }, 500
     except Exception as e:
         return {
             'status_code': 500,
